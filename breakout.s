@@ -86,7 +86,7 @@ palettes:
   .byte $30, $3D, $2D, $1D
   .byte $30, $3D, $2D, $1D
 
-; Character memory
+; character memory
 .segment "CHARS"
     .byte %11111111
     .byte %11111111
