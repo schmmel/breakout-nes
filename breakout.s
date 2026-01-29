@@ -8,7 +8,7 @@
     .addr RESET ; jump point on power on/reset
     .addr 0     ; external interrupt IRQ
 
-.segment "STARTUP"  ; linker requires startup even if empty
+.segment "STARTUP"  ; linker requires STArtup even if empty
 
 .segment "CODE" ; program code down here
 
@@ -23,7 +23,7 @@ RESET:
     LDX #$40
     STX $4017   ; disable APU frame IRQ
     LDX #$FF
-    TXS         ; Set up stack
+    TXS         ; set up STAck
     INX         ; now X = 0
     STX $2000   ; disable NMI
     STX $2001   ; disable rendering
@@ -36,19 +36,30 @@ clrmem:
     STA $0000, x
     STA $0100, x
     STA $0200, x
+    STA $0300, x
     STA $0400, x
     STA $0500, x
     STA $0600, x
     STA $0700, x
-    LDA #$FE
-    STA $0300, x
     INX
     BNE clrmem
 
     JSR vblankwait
 
-    LDA #%00000000
-    STA $0000
+main:
+load_palettes:
+    LDA $2002
+    LDA #$3f
+    STA $2006
+    LDA #$00
+    STA $2006
+    LDX #$00
+@loop:
+    LDA palettes, x
+    STA $2007
+    INX
+    CPX #$20
+    BNE @loop
 
     LDA #%10000000
     STA $2000
@@ -57,10 +68,56 @@ forever:
     JMP forever     ; infinite loop
 
 NMI:
-    INC $0000
-    LDA $0000
-    STA $2001
+    ; INC $0000
+    ; LDA $0000
+    ; STA $2001
     RTI
+
+palettes:
+  ; background palettes
+  .byte $30, $3D, $2D, $1D
+  .byte $30, $3D, $2D, $1D
+  .byte $30, $3D, $2D, $1D
+  .byte $30, $3D, $2D, $1D
+
+  ; sprite palettes
+  .byte $30, $3D, $2D, $1D
+  .byte $30, $3D, $2D, $1D
+  .byte $30, $3D, $2D, $1D
+  .byte $30, $3D, $2D, $1D
 
 ; Character memory
 .segment "CHARS"
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+    .byte %11111111
+
+    .byte %11111101
+    .byte %11111010
+    .byte %11110100
+    .byte %11101000
+    .byte %11010000
+    .byte %10100000
+    .byte %01000000
+    .byte %10000000
+    .byte %11111110
+    .byte %11111100
+    .byte %11111000
+    .byte %11110000
+    .byte %11100000
+    .byte %11000000
+    .byte %10000000
+    .byte %00000000
