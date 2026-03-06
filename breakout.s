@@ -108,6 +108,7 @@ forever:
     JMP forever     ; infinite loop
 
 NMI:
+    ; scroll 1 pixel per frame
     LDA $2002
     INC $0000
     LDA $0000
