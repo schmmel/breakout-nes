@@ -68,14 +68,14 @@ load_background:
     LDA #$00
     STA $2006
 
-.repeat 32, i
+.repeat 8, i
     LDX #$00
 
     :
-        LDA background+32*i, x
+        LDA background+128*i, x
         STA $2007
         INX
-        CPX #$20    ; loop $20 (132) times 
+        CPX #$80
         BNE :-
 .endrepeat
 
@@ -108,14 +108,16 @@ forever:
     JMP forever     ; infinite loop
 
 NMI:
+    LDA $2002
+    INC $0000
+    LDA $0000
+    STA $2005
+
     ; PPU cleanup
     LDA #%10000000  ; enable vblank
     STA $2000
     LDA #%00001010  ; enable background, no clipping on left side
     STA $2001
-    LDA #$00        ; tell the ppu there is no background scrolling
-    STA $2005
-    STA $2005
 
     RTI
 
