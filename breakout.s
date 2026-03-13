@@ -48,7 +48,7 @@ clrmem:
 
 main:
 load_palettes:
-    LDA $2002
+    BIT $2002
     LDA #$3f
     STA $2006
     LDA #$00
@@ -80,7 +80,7 @@ load_background:
 .endrepeat
 
 load_attribute:
-    LDA $2002
+    BIT $2002
     LDA #$23
     STA $2006
     LDA #$C0
@@ -98,7 +98,7 @@ load_attribute:
         BNE :-
 .endrepeat
 
-    LDA $2002
+    BIT $2002
 
     LDA #%10000000 ; enable vblank
     STA $2000
@@ -115,7 +115,7 @@ forever:
 
 NMI:
     ; scroll 1 pixel per frame
-    LDA $2002
+    BIT $2002
     INC $0000
     LDA $0000
     STA $2005
