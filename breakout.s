@@ -98,11 +98,17 @@ load_attribute:
         BNE :-
 .endrepeat
 
+    LDA $2002
+
     LDA #%10000000 ; enable vblank
     STA $2000
 
     LDA #%00001010 ; enable background, no clipping on left side
     STA $2001
+
+    LDA #$00    ; set scroll to 0,0
+    STA $2005
+    STA $2005
 
 forever:
     JMP forever     ; infinite loop
@@ -113,7 +119,7 @@ NMI:
     INC $0000
     LDA $0000
     STA $2005
-
+    
     ; PPU cleanup
     LDA #%10000000  ; enable vblank
     STA $2000
