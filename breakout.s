@@ -103,10 +103,10 @@ load_attribute:
     LDA #%10000000 ; enable vblank
     STA $2000
 
-    LDA #%00001010 ; enable background, no clipping on left side
+    LDA #%00011110 ; enable background + sprites, no clipping on left side
     STA $2001
 
-    LDA #$00    ; set scroll to 0,0
+    LDA #$00    ; init scroll to 0,0
     STA $2005
     STA $2005
 
@@ -123,7 +123,7 @@ NMI:
     ; PPU cleanup
     LDA #%10000000  ; enable vblank
     STA $2000
-    LDA #%00001010  ; enable background, no clipping on left side
+    LDA #%00011110 ; enable background + sprites, no clipping on left side
     STA $2001
 
     RTI
